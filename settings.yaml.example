@@ -1,0 +1,19 @@
+synced_folder:
+#    map: ""
+
+forwarded_ports:
+    ssh: 2222
+    http: 80
+    https: 443
+    mysql: 3306
+
+vm:
+    gui: false
+    cpus: 2
+    memory: 4096
+#    name: ""
+
+#ssh:
+#    insert_key: true
+#    forward_agent: true
+#    private_key_path: "~/.ssh/id_vagrant"

@@ -1,0 +1,8 @@
+*.log
+/.vagrant
+/config/apache/*.conf
+/config/hosts/tmp
+/settings.yaml
+/settings.windows.yaml
+/settings.darwin.yaml
+/settings.linux.yaml
