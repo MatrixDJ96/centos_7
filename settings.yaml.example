@@ -1,19 +1,24 @@
-synced_folder:
-#    map: ""
+#synced_folder:
+#    map: ~/Projects/PHP                    # Path cartella host condivisa (https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage)
+#    type: "nfs"                            # Tipo di condivisione delle cartelle (https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage#type)
+#    opts:                                  # Opzioni aggiuntive relative al tipo di condivisione (https://developer.hashicorp.com/vagrant/docs/synced-folders/basic_usage#options)
+#        nfs_version: 4
+#        nfs_udp: false
 
-forwarded_ports:
-    ssh: 2222
-    http: 80
-    https: 443
-    mysql: 3306
+#forwarded_ports:                           # Forward porte nella macchina host (https://developer.hashicorp.com/vagrant/docs/networking/forwarded_ports)
+#    ftp: 2221
+#    ssh: 2222
+#    http: 80
+#    https: 443
+#    mysql: 3306
 
-vm:
-    gui: false
-    cpus: 2
-    memory: 4096
-#    name: ""
+#vm:                                        # Impostazioni della macchina virtuale (https://developer.hashicorp.com/vagrant/docs/vagrantfile/machine_settings)
+#    gui: false                             # Visualizza GUI quando esegui vagrant up/reload
+#    cpus: 2                                # Imposta il numero di CPU da utilizzare nella VM
+#    memory: 4096                           # Imposta la quantità in MB di ram da attribuire alla VM
+#    name: ""                               # Imposta il nome VM (funziona solammente su VirtualBox)
 
-#ssh:
-#    insert_key: true
-#    forward_agent: true
-#    private_key_path: "~/.ssh/id_vagrant"
+#ssh:                                       # Impostazioni aggiuntive ssh (https://developer.hashicorp.com/vagrant/docs/vagrantfile/ssh_settings)
+#    insert_key: true                       # Inserisce la chiave di default di vagrant
+#    forward_agent: true                    # Esegue forward dell'agent ssh durante la connessione
+#    private_key_path: "~/.ssh/id_vagrant"  # Imposta chiave privata custom per connettersi in ssh

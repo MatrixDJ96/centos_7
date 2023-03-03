@@ -1,19 +1,39 @@
 ### Requisiti
+
 - [Vagrant][1]
 - [VirtualBox][2]
 
-### Configurazione VM
-Per configurare la macchina virtuale è necessario creare il file **settings.yaml** (usare il file **settings.yaml.example** come riferimento)\
-Nel file di configurazione è ***necessario*** impostare il percorso relativo dello share dei progetti fra *guest* e *host*\
-Inoltre è possibile impostare il tipo di share fra *guest* e *host*, modificare la quantità di *ram* e cambiare il numero di *core* della **VM**
+### Configurazione
 
-### Installazione VM
-- Eseguire **plugins.(bat/sh)** per installare/aggiornare i plugin di *Vagrant* necessari
-- Eseguire **init.(bat/sh)** per installare/aggiornare la macchina virtuale con *VirtualBox*
-- Eseguire **install_virtualhosts.(bat/sh)** per aggiornare il file host della macchina *guest* e *host*
+Seguire le info presenti nel file **settings.yaml.example** per le configurare _Vagrant_
 
-### Utilizzo VM
-Per usare correttamente la macchina virtuale è necessario clonare i progetti *Web* all'interno della cartella **/vagrant/projects**
+### Installazione
+
+- Creare il file **settings.yaml** nella root del progetto
+- Impostare la chiave _**synced_folder.map**_ nel file appena creato con il path desiderato
+- Eseguire `init.(bat/sh) virtualbox` per installare/aggiornare la macchina virtuale con _VirtualBox_
+
+### Post-Installazione
+
+Per mappare i _Virtual Host_ di _Apache_ eseguire `install_virtualhosts.(bat/sh)` come admin\
+Questo script aggiorna il file hosts di sistema mappando in _localhost_ i _Virtual Host_ di _Apache_
+
+Per poter connettersi tramite `ssh vagrant.local` senza password eseguire `install_ssh_key.(bat/sh)`\
+Questo script genera una nuova coppia di chiavi ssh e configura ssh per permette la connessione remota
+
+### Apache
+
+Per usare _Apache_ è necessario creare i _Virtual Host_ all'interno della cartella **config/apache**\
+I _Virtual Host_ creati dovranno avere la **DocumentRoot** nella sotto cartella **/vagrant/projects**
+
+### Password
+
+Tutte le password di sistema sono `vagrant`
 
 [1]: https://www.vagrantup.com/downloads.html
 [2]: https://www.virtualbox.org/wiki/Downloads
+
+### Risoluzioni problemi
+
+- Problema configurazione scheda di rete VirtualBox\
+  Rimuovere tutte le schede di tipo Host-Only tramite VirtualBox

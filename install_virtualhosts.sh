@@ -1,8 +1,13 @@
 #!/bin/bash
 
+cd $(dirname $0)
+
 echo Installing virtual hosts...
-sudo cp -f /etc/hosts config/hosts/tmp \
-  && vagrant ssh -c "sudo bash /vagrant/config/hosts/install_virtualhosts.sh" \
-  && sed -i 's/\r//g' config/hosts/tmp \
-  && sudo cp -f config/hosts/tmp /etc/hosts \
-  && rm -f config/hosts/tmp
+
+sudo cp -f /etc/hosts config/tmp_host &&
+  vagrant ssh -c "sudo bash /vagrant/config/extra/install_virtualhosts.sh" &&
+  sed -i 's/\r//g' config/tmp_host &&
+  sudo cp -f config/tmp_host /etc/hosts &&
+  rm -f config/tmp_host
+
+echo Done

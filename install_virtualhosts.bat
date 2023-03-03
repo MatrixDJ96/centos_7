@@ -1,26 +1,44 @@
 @echo off
 
-set "params=%*"
+:: https://superuser.com/questions/788924/is-it-possible-to-automatically-run-a-batch-file-as-administrator
+:-------------------------------------
+REM  --> Check for permissions
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo Requesting administrative privileges...
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params = %*:"=""
+    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+    pushd "%CD%"
+    CD /D "%~dp0"
+:--------------------------------------
 
 cd /d "%~dp0"
 
 title Installing virtual hosts...
 echo Installing virtual hosts...
 
-type C:\Windows\System32\drivers\etc\hosts>config\hosts\tmp
+type C:\Windows\System32\drivers\etc\hosts>config\tmp_host
 
-vagrant ssh -c "sudo bash /vagrant/config/hosts/install_virtualhosts.sh"
-if %errorlevel% neq 0 (
-	goto :custom_exit
-)
+vagrant ssh -c "sudo bash /vagrant/config/extra/install_virtualhosts.sh"
 
-type config\hosts\tmp>C:\Windows\System32\drivers\etc\hosts
-del config\hosts\tmp
+type config\tmp_host>C:\Windows\System32\drivers\etc\hosts
+del config\tmp_host>NUL 2>&1
 
-:custom_exit
-	if %errorlevel% neq 0 (
-		echo Error code: %errorlevel%
-	)
+title Done
+echo Done
 
 pause
 exit /b %errorlevel%

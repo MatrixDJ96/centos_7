@@ -54,25 +54,29 @@ cp -f /vagrant/config/php/99-php-fpm.conf /etc/httpd/conf.modules.d/99-php-fpm.c
 chmod 644 /etc/httpd/conf.modules.d/99-php-fpm.conf
 
 post_install() {
-    rm /etc/httpd/conf.d/${1}-php.conf
-    ln -s /opt/remi/${1}/root/usr/bin/pecl /bin/${1}-pecl
+  rm -f /etc/httpd/conf.d/${1}-php.conf
 
-    cp -f /vagrant/config/php/15-xdebug.ini /etc/opt/remi/${1}/php.d/15-xdebug.ini
-    chmod 644 /etc/opt/remi/${1}/php.d/15-xdebug.ini
+  ln -fs /opt/remi/${1}/root/usr/bin/pear /bin/${1}-pear
+  ln -fs /opt/remi/${1}/root/usr/bin/pecl /bin/${1}-pecl
+  ln -fs /opt/remi/${1}/root/usr/bin/phpize /bin/${1}-phpize
+  ln -fs /opt/remi/${1}/root/usr/bin/php-config /bin/${1}-config
 
-    sed -i 's/memory_limit.*/memory_limit = -1/g' /etc/opt/remi/${1}/php.ini
-    sed -i 's/max_execution_time.*/max_execution_time = 900/g' /etc/opt/remi/${1}/php.ini
-    sed -i 's/max_input_time.*/max_input_time = 900/g' /etc/opt/remi/${1}/php.ini
-    sed -i 's/post_max_size.*/post_max_size = 50M/g' /etc/opt/remi/${1}/php.ini
-    sed -i 's/short_open_tag.*/short_open_tag = On/g' /etc/opt/remi/${1}/php.ini
-    sed -i 's/upload_max_filesize.*/upload_max_filesize = 50M/g' /etc/opt/remi/${1}/php.ini
+  cp -f /vagrant/config/php/15-xdebug.ini /etc/opt/remi/${1}/php.d/15-xdebug.ini
+  chmod 644 /etc/opt/remi/${1}/php.d/15-xdebug.ini
+
+  sed -i 's/memory_limit.*/memory_limit = -1/g' /etc/opt/remi/${1}/php.ini
+  sed -i 's/max_execution_time.*/max_execution_time = 900/g' /etc/opt/remi/${1}/php.ini
+  sed -i 's/max_input_time.*/max_input_time = 900/g' /etc/opt/remi/${1}/php.ini
+  sed -i 's/post_max_size.*/post_max_size = 50M/g' /etc/opt/remi/${1}/php.ini
+  sed -i 's/short_open_tag.*/short_open_tag = On/g' /etc/opt/remi/${1}/php.ini
+  sed -i 's/upload_max_filesize.*/upload_max_filesize = 50M/g' /etc/opt/remi/${1}/php.ini
 }
 
 post_install php74
 post_install php81
 
-rm -f $(which php)
-ln -s $(which php74) /bin/php
+ln -fs $(which php81) /bin/php
 
 systemctl enable php74-php-fpm
 systemctl enable php81-php-fpm
+

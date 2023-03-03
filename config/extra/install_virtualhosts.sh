@@ -1,10 +1,10 @@
 #!/bin/bash
 
 linux_host="/etc/hosts"
-windows_host="/vagrant/config/hosts/tmp"
+windows_host="/vagrant/config/tmp_host"
 
 if [ "$(whoami)" == "root" ]; then
-  (test -f "$linux_host" && test -f "$windows_host") || (echo "Hosts file/s not found" && exit 1)
+  (test -f "$linux_host" && test -f "$windows_host") || (echo "Required file/s not found" && exit 1)
 
   sed -i 's/\r//g' "$windows_host"
 
@@ -18,10 +18,6 @@ if [ "$(whoami)" == "root" ]; then
     host=$(sed 's/\r//g' "$path" | grep 'ServerName' | awk '{print $2}')
 
     if [ "$file" != "" ]; then
-      rm -f "/etc/httpd/conf.d/$file"
-      cp -f "$path" "/etc/httpd/conf.d/$file"
-      chmod 644 "/etc/httpd/conf.d/$file"
-
       if [ "$host" != "" ] && [ "$host" != "localhost" ]; then
         sed -i "/.*\b$host\b.*/d" "$linux_host"
         echo "127.0.0.1 $host" >>"$linux_host"

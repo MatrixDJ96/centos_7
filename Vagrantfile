@@ -34,6 +34,7 @@ settings['synced_folder']['opts']['type'] = settings['synced_folder'].delete('ty
 settings['synced_folder']['opts'] = settings['synced_folder']['opts'].transform_keys(&:to_sym)
 
 settings['forwarded_ports'] = settings['forwarded_ports'] || {}
+settings['forwarded_ports']['ftp'] = settings['forwarded_ports']['ftp'] || 2221
 settings['forwarded_ports']['ssh'] = settings['forwarded_ports']['ssh'] || 2222
 settings['forwarded_ports']['http'] = settings['forwarded_ports']['http'] || 80
 settings['forwarded_ports']['https'] = settings['forwarded_ports']['https'] || 443
@@ -58,6 +59,7 @@ Vagrant.configure("2") do |config|
     config.vm.hostname = "vagrant.local"
 
     # Forwarded ports
+    config.vm.network :forwarded_port, auto_correct:true, guest: 21, host: settings['forwarded_ports']['ftp']               # FTP
     config.vm.network :forwarded_port, auto_correct:true, guest: 22, host: settings['forwarded_ports']['ssh'], id: "ssh"    # SSH
     config.vm.network :forwarded_port, auto_correct:true, guest: 80, host: settings['forwarded_ports']['http']              # Apache (HTTP)
     config.vm.network :forwarded_port, auto_correct:true, guest: 443, host: settings['forwarded_ports']['https']            # Apache (HTTPS)
@@ -69,24 +71,34 @@ Vagrant.configure("2") do |config|
     # Provision
     config.vm.provision :shell, :path => "config/provision.sh"
 
+    # Plugin trigger
+    unless Vagrant.has_plugin?("vagrant-vbguest")
+        config.trigger.before [:up, :reload] do |trigger|
+            trigger.run = {inline: "vagrant plugin install vagrant-vbguest"}
+        end
+    else
+        config.vbguest.auto_update = false
+    end
+
+    # Apache trigger
+    config.trigger.after [:up, :reload] do |trigger|
+        trigger.run_remote = {inline: "systemctl start httpd"}
+    end
+
     # Synced folders
     config.vm.synced_folder ".", "/vagrant", disabled: true
     config.vm.synced_folder "config", "/vagrant/config", create: true, owner: "root", group: "root"
     config.vm.synced_folder settings['synced_folder']['map'], "/vagrant/projects", settings['synced_folder']['opts']
 
     # VirtualBox settings
-    if Vagrant.has_plugin?("vagrant-vbguest")
-        config.vbguest.auto_update = false
-
-        config.vm.provider "virtualbox" do |vm|
-            vm.gui = settings['vm']['gui']
-            vm.cpus = settings['vm']['cpus']
-            vm.memory = settings['vm']['memory']
-            if !settings['vm']['name'].empty? then
-                vm.name = settings['vm']['name']
-            end
+    config.vm.provider "virtualbox" do |vm|
+        vm.gui = settings['vm']['gui']
+        vm.cpus = settings['vm']['cpus']
+        vm.memory = settings['vm']['memory']
+        if !settings['vm']['name'].empty? then
+            vm.name = settings['vm']['name']
         end
-	end
+    end
 
     # SSH settings
     config.ssh.insert_key = settings['ssh']['insert_key']
