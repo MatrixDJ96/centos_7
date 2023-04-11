@@ -80,6 +80,12 @@ Vagrant.configure("2") do |config|
         config.vbguest.auto_update = false
     end
 
+    unless Vagrant.has_plugin?("vagrant-vmware-desktop")
+        config.trigger.before [:up, :reload] do |trigger|
+            trigger.run = {inline: "vagrant plugin install vagrant-vmware-desktop"}
+        end
+    end
+
     # Apache trigger
     config.trigger.after [:up, :reload] do |trigger|
         trigger.run_remote = {inline: "systemctl start httpd"}
@@ -97,6 +103,16 @@ Vagrant.configure("2") do |config|
         vm.memory = settings['vm']['memory']
         if !settings['vm']['name'].empty? then
             vm.name = settings['vm']['name']
+        end
+    end
+
+    # VMWare settings
+    ["vmware_workstation", "vmware_desktop"].each do |provider|
+        config.vm.provider provider do |vm|
+        vm.gui = settings['vm']['gui']
+        vm.cpus = settings['vm']['cpus']
+        vm.memory = settings['vm']['memory']
+        vm.linked_clone = false
         end
     end
 
