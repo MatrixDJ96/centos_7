@@ -14,13 +14,13 @@ exec /vagrant/config/provision/clean.sh 2>&1 | tee -i /vagrant/config/provision/
 echo "Installing basic packages..."
 exec /vagrant/config/provision/basic_packages.sh 2>&1 | tee -i /vagrant/config/provision/basic_packages.log >/dev/null
 
-echo "Installing/Configuring MySQL 8..."
+echo "Installing/Configuring MySQL..."
 exec /vagrant/config/provision/mysql.sh 2>&1 | tee -i /vagrant/config/provision/mysql.log >/dev/null
 
-echo "Installing/Configuring PHP 7.4/8.1..."
+echo "Installing/Configuring PHP..."
 exec /vagrant/config/provision/php.sh 2>&1 | tee -i /vagrant/config/provision/php.log >/dev/null
 
-echo "Installing/Configuring Apache 2..."
+echo "Installing/Configuring Apache..."
 exec /vagrant/config/provision/apache.sh 2>&1 | tee -i /vagrant/config/provision/apache.log >/dev/null
 
 echo "Installing extra packages..."
