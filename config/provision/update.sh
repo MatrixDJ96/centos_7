@@ -1,3 +1,3 @@
 #!/bin/bash
 
-yum -y update
+yum -y update --skip-broken
