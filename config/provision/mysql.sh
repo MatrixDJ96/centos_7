@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-11.noarch.rpm
 yum-config-manager --enable mysql80-community
 yum -y install mysql-community-server
 
