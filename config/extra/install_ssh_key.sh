@@ -6,7 +6,7 @@ config_file="/vagrant/config/tmp_ssh_config"
 if [ "$(whoami)" == "root" ]; then
   (test -f "$pub_file" && test -f "$config_file") || (echo "Required file/s not found" && exit 1)
 
-  pip3 install -q ssh-config && ln -fs /usr/local/bin/ssh-config /usr/bin/ssh-config
+  pip3 install -q ssh-config==0.1.4 && ln -fs /usr/local/bin/ssh-config /usr/bin/ssh-config
 
   echo y | ssh-config -f "$config_file" remove vagrant.local >/dev/null
   echo y | ssh-config -f "$config_file" add vagrant.local \
