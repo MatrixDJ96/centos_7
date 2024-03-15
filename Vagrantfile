@@ -86,6 +86,14 @@ Vagrant.configure("2") do |config|
         end
     end
 
+    # WinFSD plugin
+    if Vagrant::Util::Platform.windows? then
+        if Vagrant.has_plugin?("vagrant-winnfsd") then
+            config.winnfsd.uid = 1
+            config.winnfsd.gid = 1
+        end
+    end
+
     # Apache trigger
     config.trigger.after [:up, :reload] do |trigger|
         trigger.run_remote = {inline: "systemctl start httpd"}

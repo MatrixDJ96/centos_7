@@ -21,6 +21,13 @@ Questo script aggiorna il file hosts di sistema mappando in _localhost_ i _Virtu
 Per poter connettersi tramite `ssh vagrant.local` senza password eseguire `install_ssh_key.(bat/sh)`\
 Questo script genera una nuova coppia di chiavi ssh e configura ssh per permette la connessione remota
 
+Per ottimizzare le risorse attribuite alla macchima virtuale installare questo plugin tramite il comando
+- vagrant plugin install vagrant-vagrant-faster
+avi ssh e configura ssh per permette la connessione remota
+
+Per usare la condivisione **NFS** delle cartelle su _Windows_ installare questo plugin tramite il comando
+- vagrant plugin install vagrant-winnfsd
+
 ### Apache
 
 Per usare _Apache_ è necessario creare i _Virtual Host_ all'interno della cartella **config/apache**\
