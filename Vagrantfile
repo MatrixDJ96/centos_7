@@ -114,6 +114,13 @@ Vagrant.configure("2") do |config|
         end
     end
 
+    # libvirt settings
+    config.vm.provider "libvirt" do |vm|
+        vm.cpus = settings['vm']['cpus']
+        vm.memory = settings['vm']['memory']
+        vm.forward_ssh_port = true
+    end
+
     # SSH settings
     config.ssh.insert_key = settings['ssh']['insert_key']
     config.ssh.forward_agent = settings['ssh']['forward_agent']
