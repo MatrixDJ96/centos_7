@@ -71,19 +71,9 @@ Vagrant.configure("2") do |config|
     # Provision
     config.vm.provision :shell, :path => "config/provision.sh"
 
-    # Plugin trigger
-    unless Vagrant.has_plugin?("vagrant-vbguest")
-        config.trigger.before [:up, :reload] do |trigger|
-            trigger.run = {inline: "vagrant plugin install vagrant-vbguest"}
-        end
-    else
+    # Virtualbox plugin
+    if Vagrant.has_plugin?("vagrant-vbguest")
         config.vbguest.auto_update = false
-    end
-
-    unless Vagrant.has_plugin?("vagrant-vmware-desktop")
-        config.trigger.before [:up, :reload] do |trigger|
-            trigger.run = {inline: "vagrant plugin install vagrant-vmware-desktop"}
-        end
     end
 
     # WinFSD plugin
