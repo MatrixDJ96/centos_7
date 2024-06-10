@@ -15,7 +15,7 @@ if [ "$(whoami)" == "root" ]; then
     test -f "$path" || continue
 
     file=$(basename "$path")
-    host=$(sed 's/\r//g' "$path" | grep 'ServerName' | awk '{print $2}')
+    host=$(sed 's/\r//g' "$path" | grep 'ServerName' | grep -v '#' | awk '{print $2}')
 
     if [ "$file" != "" ]; then
       if [ "$host" != "" ] && [ "$host" != "localhost" ]; then
