@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ${HOME}
+cd "${HOME}" || exit
 
 echo "Disabling SELinux..."
 exec /vagrant/config/provision/selinux.sh 2>&1 | tee -i /vagrant/config/provision/selinux.log >/dev/null
@@ -28,5 +28,8 @@ exec /vagrant/config/provision/extra_packages.sh 2>&1 | tee -i /vagrant/config/p
 
 echo "Updating system..."
 exec /vagrant/config/provision/update.sh 2>&1 | tee -i /vagrant/config/provision/update.log >/dev/null
+
+echo "Fixing CentOS repos..."
+exec /vagrant/config/provision/yum.sh 2>&1 | tee -i /vagrant/config/provision/yum.log >/dev/null
 
 echo "Installation completed!"

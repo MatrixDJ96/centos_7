@@ -18,6 +18,8 @@ end
 
 settings = $settings ||= YAML.load_file(settings_file)
 
+settings['first_provision'] ||= false
+
 settings['synced_folder'] ||= {}
 settings['synced_folder']['map'] = settings['synced_folder'].fetch('map', "").strip
 
@@ -47,7 +49,7 @@ end
 
 Vagrant.configure("2") do |config|
     # Use Centos 7 as base machine
-    config.vm.box = "generic/centos_7"
+    config.vm.box = "generic/centos7"
 
     # Hostname
     config.vm.hostname = "vagrant.local"
@@ -63,7 +65,11 @@ Vagrant.configure("2") do |config|
     config.vm.network :private_network, type: "dhcp"
 
     # Provision
-    config.vm.provision :shell, path: "config/provision.sh"
+    if !settings['first_provision']
+        config.vm.provision :shell, path: "config/provision.sh"
+    else
+        config.vm.provision :shell, path: "config/provision/yum.sh"
+    end
 
     # Virtualbox plugin
     if Vagrant.has_plugin?("vagrant-vbguest")
@@ -77,14 +83,19 @@ Vagrant.configure("2") do |config|
     end
 
     # Apache trigger
-    config.trigger.after [:up, :reload] do |trigger|
-        trigger.run_remote = { inline: "systemctl start httpd" }
+    if !settings['first_provision']
+        config.trigger.after [:up, :reload] do |trigger|
+            trigger.run_remote = { inline: "systemctl start httpd" }
+        end
     end
 
     # Synced folders
     config.vm.synced_folder ".", "/vagrant", disabled: true
-    config.vm.synced_folder "config", "/vagrant/config", create: true, owner: "root", group: "root"
     config.vm.synced_folder settings['synced_folder']['map'], "/vagrant/projects", settings['synced_folder']['opts']
+
+    if !settings['first_provision']
+        config.vm.synced_folder "config", "/vagrant/config", create: true, owner: "root", group: "root"
+    end
 
     # VirtualBox settings
     config.vm.provider "virtualbox" do |vm|
