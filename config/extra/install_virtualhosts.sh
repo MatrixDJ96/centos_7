@@ -19,10 +19,10 @@ if [ "$(whoami)" == "root" ]; then
 
     if [ "$file" != "" ]; then
       if [ "$host" != "" ] && [ "$host" != "localhost" ]; then
-        sed -i "/.*\b$host\b.*/d" "$linux_host"
+        sed -i "/[[:space:]]\+$host\b/d" "$linux_host"
         echo "127.0.0.1 $host" >>"$linux_host"
 
-        sed -i "/.*\b$host\b.*/d" "$windows_host"
+        sed -i "/[[:space:]]\+$host\b/d" "$windows_host"
         echo "127.0.0.1 $host" >>"$windows_host"
 
         echo "Applied virtual host '$host'"
