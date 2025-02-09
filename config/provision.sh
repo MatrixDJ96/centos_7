@@ -44,6 +44,9 @@ bash --login /vagrant/config/provision/tomcat.sh 2>&1 | tee -i /vagrant/config/p
 echo "Installing/Configuring Docker..."
 bash --login /vagrant/config/provision/docker.sh 2>&1 | tee -i /vagrant/config/provision/docker.log >/dev/null
 
+echo "Installing/Configuring Mercure..."
+bash --login /vagrant/config/provision/mercure.sh 2>&1 | tee -i /vagrant/config/provision/mercure.log >/dev/null
+
 echo "Installing extra packages..."
 bash --login /vagrant/config/provision/extra_packages.sh 2>&1 | tee -i /vagrant/config/provision/extra_packages.log >/dev/null
 
