@@ -18,5 +18,5 @@ done
 yum -y install epel-release
 yum -y install https://repo.ius.io/ius-release-el7.rpm 
 
-yum-config-manager -q --enable epel
-yum-config-manager -q --enable ius
+yum-config-manager --enable epel
+yum-config-manager --enable ius
