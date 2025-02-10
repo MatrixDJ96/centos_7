@@ -1,12 +1,41 @@
 #!/bin/bash
 
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+cd "${HOME}" || exit
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+if [ "$(id -u)" -eq 0 ]; then
+    brew install --force --overwrite node@20
+    brew install --force --overwrite node@18
 
-nvm install 14
-npm config set strict-ssl false
-npm install -g yarn
-npm install -g pm2
+    mise sync node --brew
+    mise install node@16
+    mise install node@14
+
+    mise x node@20 -- npm install yarn -g
+    mise x node@18 -- npm install yarn -g
+    mise x node@16 -- npm install yarn -g
+    mise x node@14 -- npm install yarn -g
+fi
+
+if [[ "$(hostnamectl --static)" == "vagrant.local" ]]; then
+    if [ "$(id -u)" -eq 0 ]; then
+        sudo -u vagrant bash --login "${0}"
+    else
+        mkdir -p ~/.local/share/mise/downloads/node
+        mkdir -p ~/.local/share/mise/installs/node
+        mkdir -p ~/.local/share/mise/shims
+
+        node_vagrant=~/.local/share/mise/installs/node
+        node_root=/root/.local/share/mise/installs/node
+
+        for version in $(sudo ls "${node_root}"); do
+            if [ -d "${node_root}/${version}" ]; then
+                rm -rf "${node_vagrant}/${version}"
+            fi
+        
+            sudo cp -R "${node_root}/${version}" "${node_vagrant}/${version}"
+            sudo chown -R vagrant:vagrant "${node_vagrant}/${version}"
+        done
+
+        mise reshim
+    fi
+fi
