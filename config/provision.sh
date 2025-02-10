@@ -2,34 +2,37 @@
 
 cd "${HOME}" || exit
 
-echo "Disabling SELinux..."
-exec /vagrant/config/provision/selinux.sh 2>&1 | tee -i /vagrant/config/provision/selinux.log >/dev/null
-
-echo "Configuring SSH..."
-exec /vagrant/config/provision/ssh.sh 2>&1 | tee -i /vagrant/config/provision/ssh.log >/dev/null
-
-echo "Cleaning system..."
-exec /vagrant/config/provision/clean.sh 2>&1 | tee -i /vagrant/config/provision/clean.log >/dev/null
+echo "Configuring repositories..."
+bash --login /vagrant/config/provision/yum.sh 2>&1 | tee -i /vagrant/config/provision/yum.log >/dev/null
 
 echo "Installing basic packages..."
-exec /vagrant/config/provision/basic_packages.sh 2>&1 | tee -i /vagrant/config/provision/basic_packages.log >/dev/null
+bash --login /vagrant/config/provision/basic_packages.sh 2>&1 | tee -i /vagrant/config/provision/basic_packages.log >/dev/null
 
-echo "Installing/Configuring MySQL..."
-exec /vagrant/config/provision/mysql.sh 2>&1 | tee -i /vagrant/config/provision/mysql.log >/dev/null
+echo "Installing/Configuring SELinux..."
+bash --login /vagrant/config/provision/selinux.sh 2>&1 | tee -i /vagrant/config/provision/selinux.log >/dev/null
 
-echo "Installing/Configuring PHP..."
-exec /vagrant/config/provision/php.sh 2>&1 | tee -i /vagrant/config/provision/php.log >/dev/null
+echo "Installing/Configuring SSH..."
+bash --login /vagrant/config/provision/ssh.sh 2>&1 | tee -i /vagrant/config/provision/ssh.log >/dev/null
 
 echo "Installing/Configuring Apache..."
-exec /vagrant/config/provision/apache.sh 2>&1 | tee -i /vagrant/config/provision/apache.log >/dev/null
+bash --login /vagrant/config/provision/apache.sh 2>&1 | tee -i /vagrant/config/provision/apache.log >/dev/null
+
+echo "Installing/Configuring MySQL..."
+bash --login /vagrant/config/provision/mysql.sh 2>&1 | tee -i /vagrant/config/provision/mysql.log >/dev/null
+
+echo "Installing/Configuring PHP..."
+bash --login /vagrant/config/provision/php.sh 2>&1 | tee -i /vagrant/config/provision/php.log >/dev/null
+
+echo "Installing/Configuring Composer..."
+bash --login /vagrant/config/provision/composer.sh 2>&1 | tee -i /vagrant/config/provision/composer.log >/dev/null
+
+echo "Installing/Configuring Nodejs..."
+bash --login /vagrant/config/provision/nodejs.sh 2>&1 | tee -i /vagrant/config/provision/nodejs.log >/dev/null
 
 echo "Installing extra packages..."
-exec /vagrant/config/provision/extra_packages.sh 2>&1 | tee -i /vagrant/config/provision/extra_packages.log >/dev/null
+bash --login /vagrant/config/provision/extra_packages.sh 2>&1 | tee -i /vagrant/config/provision/extra_packages.log >/dev/null
 
-echo "Updating system..."
-exec /vagrant/config/provision/update.sh 2>&1 | tee -i /vagrant/config/provision/update.log >/dev/null
-
-echo "Fixing CentOS repos..."
-exec /vagrant/config/provision/yum.sh 2>&1 | tee -i /vagrant/config/provision/yum.log >/dev/null
+echo "Updating system packages..."
+bash --login /vagrant/config/provision/update.sh 2>&1 | tee -i /vagrant/config/provision/update.log >/dev/null
 
 echo "Installation completed!"

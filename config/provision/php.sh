@@ -33,7 +33,7 @@ get_php_pkgs() {
   echo "${result}"
 }
 
-yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
 
 yum-config-manager --disable remi-php54
 yum-config-manager --disable remi-php70
