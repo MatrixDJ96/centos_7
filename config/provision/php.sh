@@ -46,16 +46,12 @@ yum-config-manager --disable remi-php81
 yum-config-manager --disable remi-php82
 yum-config-manager --disable remi-php83
 
-yum -y install $(get_php_pkgs php72-php)
-yum -y install $(get_php_pkgs php73-php)
 yum -y install $(get_php_pkgs php74-php)
 yum -y install $(get_php_pkgs php80-php)
 yum -y install $(get_php_pkgs php81-php)
 yum -y install $(get_php_pkgs php82-php)
 yum -y install $(get_php_pkgs php83-php)
 
-sed -i 's/:9000/:9072/' /etc/opt/remi/php72/php-fpm.d/www.conf
-sed -i 's/:9000/:9073/' /etc/opt/remi/php73/php-fpm.d/www.conf
 sed -i 's/:9000/:9074/' /etc/opt/remi/php74/php-fpm.d/www.conf
 sed -i 's/:9000/:9080/' /etc/opt/remi/php80/php-fpm.d/www.conf
 sed -i 's/:9000/:9081/' /etc/opt/remi/php81/php-fpm.d/www.conf
@@ -84,18 +80,12 @@ post_install() {
   sed -i 's/upload_max_filesize.*/upload_max_filesize = 50M/g' /etc/opt/remi/${1}/php.ini
 }
 
-post_install php72
-post_install php73
 post_install php74
 post_install php80
 post_install php81
 post_install php82
 post_install php83
 
-ln -fs $(which php74) /bin/php
-
-systemctl enable php72-php-fpm
-systemctl enable php73-php-fpm
 systemctl enable php74-php-fpm
 systemctl enable php80-php-fpm
 systemctl enable php81-php-fpm
