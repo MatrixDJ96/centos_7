@@ -33,18 +33,18 @@ get_php_pkgs() {
   echo "${result}"
 }
 
-yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
 
-yum-config-manager --disable remi-php54
-yum-config-manager --disable remi-php70
-yum-config-manager --disable remi-php71
-yum-config-manager --disable remi-php72
-yum-config-manager --disable remi-php73
-yum-config-manager --disable remi-php74
-yum-config-manager --disable remi-php80
-yum-config-manager --disable remi-php81
-yum-config-manager --disable remi-php82
-yum-config-manager --disable remi-php83
+yum-config-manager -q --disable remi-php54
+yum-config-manager -q --disable remi-php70
+yum-config-manager -q --disable remi-php71
+yum-config-manager -q --disable remi-php72
+yum-config-manager -q --disable remi-php73
+yum-config-manager -q --disable remi-php74
+yum-config-manager -q --disable remi-php80
+yum-config-manager -q --disable remi-php81
+yum-config-manager -q --disable remi-php82
+yum-config-manager -q --disable remi-php83
 
 yum -y install $(get_php_pkgs php72-php)
 yum -y install $(get_php_pkgs php73-php)
@@ -91,8 +91,6 @@ post_install php80
 post_install php81
 post_install php82
 post_install php83
-
-ln -fs $(which php74) /bin/php
 
 systemctl enable php72-php-fpm
 systemctl enable php73-php-fpm
