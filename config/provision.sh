@@ -47,6 +47,9 @@ bash --login /vagrant/config/provision/docker.sh 2>&1 | tee -i /vagrant/config/p
 echo "Installing/Configuring Mercure..."
 bash --login /vagrant/config/provision/mercure.sh 2>&1 | tee -i /vagrant/config/provision/mercure.log >/dev/null
 
+echo "Installing/Configuring Snapd..."
+bash --login /vagrant/config/provision/snapd.sh 2>&1 | tee -i /vagrant/config/provision/snapd.log >/dev/null
+
 echo "Installing extra packages..."
 bash --login /vagrant/config/provision/extra_packages.sh 2>&1 | tee -i /vagrant/config/provision/extra_packages.log >/dev/null
 
