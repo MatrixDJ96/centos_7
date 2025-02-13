@@ -33,6 +33,7 @@ settings['forwarded_ports']['ssh'] ||= 2222
 settings['forwarded_ports']['http'] ||= 80
 settings['forwarded_ports']['https'] ||= 443
 settings['forwarded_ports']['mysql'] ||= 3306
+settings['forwarded_ports']['tomcat'] ||= 8080
 
 settings['vm'] ||= {}
 settings['vm']['cpus'] ||= 2
@@ -60,6 +61,7 @@ Vagrant.configure("2") do |config|
     config.vm.network :forwarded_port, auto_correct: true, guest: 80, host: settings['forwarded_ports']['http']
     config.vm.network :forwarded_port, auto_correct: true, guest: 443, host: settings['forwarded_ports']['https']
     config.vm.network :forwarded_port, auto_correct: true, guest: 3306, host: settings['forwarded_ports']['mysql']
+    config.vm.network :forwarded_port, auto_correct: true, guest: 8080, host: settings['forwarded_ports']['tomcat']
 
     # Private network
     config.vm.network :private_network, type: "dhcp"
@@ -95,6 +97,7 @@ Vagrant.configure("2") do |config|
 
     if !settings['first_provision']
         config.vm.synced_folder "config", "/vagrant/config", create: true, owner: "root", group: "root"
+        config.vm.synced_folder "documents", "/vagrant/documents", create: true, owner: "vagrant", group: "vagrant"
     end
 
     # VirtualBox settings
