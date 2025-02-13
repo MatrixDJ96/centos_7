@@ -3,6 +3,7 @@
 /.idea
 /.vagrant
 /config/apache/*.conf
+/documents
 /settings.yaml
 /settings.windows.yaml
 /settings.darwin.yaml

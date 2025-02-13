@@ -41,6 +41,9 @@ bash --login /vagrant/config/provision/nodejs.sh 2>&1 | tee -i /vagrant/config/p
 echo "Installing/Configuring Java..."
 bash --login /vagrant/config/provision/java.sh 2>&1 | tee -i /vagrant/config/provision/java.log >/dev/null
 
+echo "Installing/Configuring Tomcat..."
+bash --login /vagrant/config/provision/tomcat.sh 2>&1 | tee -i /vagrant/config/provision/tomcat.log >/dev/null
+
 echo "Installing extra packages..."
 bash --login /vagrant/config/provision/extra_packages.sh 2>&1 | tee -i /vagrant/config/provision/extra_packages.log >/dev/null
 
