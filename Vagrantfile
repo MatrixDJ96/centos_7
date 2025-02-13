@@ -95,6 +95,7 @@ Vagrant.configure("2") do |config|
 
     if !settings['first_provision']
         config.vm.synced_folder "config", "/vagrant/config", create: true, owner: "root", group: "root"
+        config.vm.synced_folder "documents", "/vagrant/documents", create: true, owner: "vagrant", group: "vagrant"
     end
 
     # VirtualBox settings
