@@ -29,6 +29,9 @@ bash --login /vagrant/config/provision/composer.sh 2>&1 | tee -i /vagrant/config
 echo "Installing/Configuring Brew..."
 bash --login /vagrant/config/provision/brew.sh 2>&1 | tee -i /vagrant/config/provision/brew.log >/dev/null
 
+echo "Installing/Configuring Mise..."
+bash --login /vagrant/config/provision/mise.sh 2>&1 | tee -i /vagrant/config/provision/mise.log >/dev/null
+
 echo "Installing/Configuring Nodejs..."
 bash --login /vagrant/config/provision/nodejs.sh 2>&1 | tee -i /vagrant/config/provision/nodejs.log >/dev/null
 
