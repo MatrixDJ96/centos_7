@@ -32,7 +32,7 @@ echo Installing virtual hosts...
 
 type C:\Windows\System32\drivers\etc\hosts>config\tmp_host
 
-vagrant ssh -c "sudo bash /vagrant/config/extra/install_virtualhosts.sh"
+wsl -d CentOS sudo bash /vagrant/config/extra/install_virtualhosts.sh
 
 type config\tmp_host>C:\Windows\System32\drivers\etc\hosts
 del config\tmp_host>NUL 2>&1
