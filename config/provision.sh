@@ -38,6 +38,9 @@ bash --login /vagrant/config/provision/mise.sh 2>&1 | tee -i /vagrant/config/pro
 echo "Installing/Configuring Nodejs..."
 bash --login /vagrant/config/provision/nodejs.sh 2>&1 | tee -i /vagrant/config/provision/nodejs.log >/dev/null
 
+echo "Installing/Configuring Java..."
+bash --login /vagrant/config/provision/java.sh 2>&1 | tee -i /vagrant/config/provision/java.log >/dev/null
+
 echo "Installing extra packages..."
 bash --login /vagrant/config/provision/extra_packages.sh 2>&1 | tee -i /vagrant/config/provision/extra_packages.log >/dev/null
 
