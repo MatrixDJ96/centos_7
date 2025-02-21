@@ -2,8 +2,8 @@
 *.log
 /.idea
 /.vagrant
-/Centos.tar
-/Centos.tar.gz
+/*.tar
+/*.tar.gz
 /config/apache/*.conf
 /documents
 /settings.yaml

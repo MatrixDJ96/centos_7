@@ -3,10 +3,8 @@
 cd "${HOME}" || exit
 
 if [ "$(id -u)" -eq 0 ]; then
-    brew install --force --overwrite node@20
-    brew install --force --overwrite node@18
-
-    mise sync node --brew
+    mise install node@20
+    mise install node@18
     mise install node@16
     mise install node@14
 
@@ -14,8 +12,6 @@ if [ "$(id -u)" -eq 0 ]; then
     mise x node@18 -- npm install yarn -g
     mise x node@16 -- npm install yarn -g
     mise x node@14 -- npm install yarn -g
-
-    brew link --force --overwrite node@20
 else
     if [[ "$(hostnamectl --static)" == "vagrant.local" ]]; then
         mkdir -p ~/.local/share/mise/downloads/node

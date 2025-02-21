@@ -26,9 +26,6 @@ bash --login /vagrant/config/provision/php.sh 2>&1 | tee -i /vagrant/config/prov
 echo "Installing/Configuring Composer..."
 bash --login /vagrant/config/provision/composer.sh 2>&1 | tee -i /vagrant/config/provision/composer.log >/dev/null
 
-echo "Installing/Configuring Brew..."
-bash --login /vagrant/config/provision/brew.sh 2>&1 | tee -i /vagrant/config/provision/brew.log >/dev/null
-
 echo "Installing/Configuring Mise..."
 bash --login /vagrant/config/provision/mise.sh 2>&1 | tee -i /vagrant/config/provision/mise.log >/dev/null
 
@@ -49,9 +46,6 @@ bash --login /vagrant/config/provision/mercure.sh 2>&1 | tee -i /vagrant/config/
 
 echo "Installing/Configuring Snapd..."
 bash --login /vagrant/config/provision/snapd.sh 2>&1 | tee -i /vagrant/config/provision/snapd.log >/dev/null
-
-echo "Installing/Configuring Util-Linux..."
-bash --login /vagrant/config/provision/util-linux.sh 2>&1 | tee -i /vagrant/config/provision/util-linux.log >/dev/null
 
 echo "Installing extra packages..."
 bash --login /vagrant/config/provision/extra_packages.sh 2>&1 | tee -i /vagrant/config/provision/extra_packages.log >/dev/null

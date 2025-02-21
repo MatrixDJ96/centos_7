@@ -2,23 +2,23 @@
 
 cd /d "%~dp0"
 
-set "WSL_IMPORT_DIR=%APPDATA%/WSL/CentOS"
+set "WSL_IMPORT_DIR=%APPDATA%/WSL/RHEL9"
 if not exist "%WSL_IMPORT_DIR%" (
     mkdir "%WSL_IMPORT_DIR%"
 )
 
 set "WSL_FILE=%~1"
 if "%WSL_FILE%" == "" (
-    set "WSL_FILE=CentOS.tar.gz"
+    set "WSL_FILE=RHEL9.tar.gz"
 )
 
 title Cleaning system...
 echo Cleaning system...
-wsl --unregister CentOS
+wsl --unregister RHEL9
 
-title Importing CentOS...
-echo Importing CentOS...
-wsl --import CentOS "%WSL_IMPORT_DIR%" "%WSL_FILE%"
+title Importing RHEL9...
+echo Importing RHEL9...
+wsl --import RHEL9 "%WSL_IMPORT_DIR%" "%WSL_FILE%"
 
 if "%~2" == "--clean" (
     title Cleaning file...
