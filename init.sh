@@ -20,17 +20,17 @@ if [ "${1}" = "--ubuntu" ]; then
     # Install the Docker packages
     apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-    # Create CentOS 7 image
-    docker build -t local/centos7 .
-    docker run -t --name wsl_export local/centos7 ls / > /dev/null
-    docker export wsl_export > ./CentOS.tar
+    # Create RHEL9 7 image
+    docker build -t local/rhel9 .
+    docker run -t --name wsl_export local/rhel9 ls / > /dev/null
+    docker export wsl_export > ./RHEL9.tar
     docker rm -f wsl_export > /dev/null
 elif [ "${1}" = "--centos" ]; then
     # Set the hostname
     hostnamectl set-hostname vagrant.local
     echo "127.0.0.1 localhost" > /etc/hosts
-    echo "127.0.1.1 $(hostname)" >> /etc/hosts
-    
+    echo "127.0.1.1 vagrant vagrant.local" >> /etc/hosts
+
     # Link config files
     rm -f /vagrant/config
 	mkdir -p /vagrant/projects

@@ -1,35 +1,11 @@
-FROM centos:7
+FROM redhat/ubi9-init:latest
 
 ENV container=docker
 ENV username=vagrant
 
-# Fixing the repositories
-RUN set -eux; \
-    cd /etc/yum.repos.d; \
-    for file in *.repo; do \
-      if [ -f "$file" ] && grep -qP '^\s*[^#\s]' "$file"; then \
-        sed -E -i 's|https?://mirror[^/]*\.centos\.org/|http://vault.centos.org/|g' "$file"; \
-        sed -E -i 's/^\s*#?\s*(mirrorlist=)/#\1/g' "$file"; \
-        sed -E -i 's/^\s*#?\s*(baseurl=)/\1/' "$file"; \
-      fi; \
-    done
-
 # Updating the system
 RUN set -eux; \
     yum update -y
-
-# Enabling systemd support
-RUN set -eux; \
-    (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
-    systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-    rm -f /lib/systemd/system/multi-user.target.wants/*; \
-    rm -f /etc/systemd/system/*.wants/*; \
-    rm -f /lib/systemd/system/local-fs.target.wants/*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-    rm -f /lib/systemd/system/basic.target.wants/*; \
-    rm -f /lib/systemd/system/anaconda.target.wants/*; \
-    yum -y reinstall systemd
 
 # Creating default user
 RUN set -eux; \
@@ -45,6 +21,7 @@ RUN set -eux; \
 
 # Disabling IPv6
 RUN set -eux; \
+    mkdir -p /etc/sysctl.d; \
     echo "net.ipv6.conf.all.disable_ipv6=1" > /etc/sysctl.d/disable-ipv6.conf; \
     echo "net.ipv6.conf.default.disable_ipv6=1" >> /etc/sysctl.d/disable-ipv6.conf
 
