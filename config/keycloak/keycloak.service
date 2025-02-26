@@ -1,0 +1,12 @@
+[Unit]
+Description=Keycloak server
+After=network.target
+
+[Service]
+Environment=JAVA_HOME=
+ExecStart=/opt/keycloak/latest/bin/kc.sh start-dev
+User=keycloak
+Group=keycloak
+
+[Install]
+WantedBy=multi-user.target
