@@ -3,10 +3,8 @@
 cd "${HOME}" || exit
 
 if [ "$(id -u)" -eq 0 ]; then
-    brew install --force --overwrite node@20
-    brew install --force --overwrite node@18
-
-    mise sync node --brew
+    mise install node@20
+    mise install node@18
     mise install node@16
     mise install node@14
 
