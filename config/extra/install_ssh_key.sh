@@ -1,29 +1,50 @@
 #!/bin/bash
 
-pub_file="/vagrant/config/tmp_ssh_pub"
 config_file="/vagrant/config/tmp_ssh_config"
+priv_file="/vagrant/config/tmp_ssh_priv"
+pub_file="/vagrant/config/tmp_ssh_pub"
 
-if [ "$(whoami)" == "root" ]; then
-  (test -f "$pub_file" && test -f "$config_file") || (echo "Required file/s not found" && exit 1)
+username="vagrant"
+ssh_user="$username"
 
-  pip3 install -q ssh-config==0.1.4 && ln -fs /usr/local/bin/ssh-config /usr/bin/ssh-config
+for f in "$config_file" "$priv_file" "$pub_file"; do
+    [[ -f $f ]] || { echo "Required file/s not found"; exit 1; }
+done
 
-  echo y | ssh-config -f "$config_file" remove vagrant.local >/dev/null
-  echo y | ssh-config -f "$config_file" add vagrant.local \
-    HostName="127.0.0.1" \
-    User="vagrant" Port="2222" \
-    IdentityFile="~/.ssh/id_vagrant" \
-    IdentitiesOnly="yes" >/dev/null
+pip3 install -q ssh-config==0.1.6 >/dev/null 2>&1
+ln -fs /usr/local/bin/ssh-config /usr/bin/ssh-config
 
-  sed -i ':a;N;$!ba;s/\nHost/\n\nHost/g' "$config_file"
+if ! id "$username" >/dev/null 2>&1; then
+    ssh_user="root"
+fi
 
-  mkdir -p /home/vagrant/.ssh
-  chmod 700 /home/vagrant/.ssh
-  touch /home/vagrant/.ssh/authorized_keys
-  chmod 600 /home/vagrant/.ssh/authorized_keys
-  cat "$pub_file" >>/home/vagrant/.ssh/authorized_keys
+echo y | ssh-config -f "$config_file" remove vagrant.local >/dev/null
+echo y | ssh-config -f "$config_file" add vagrant.local \
+  HostName="127.0.0.1" User="$ssh_user" Port="2222" \
+  IdentityFile="~/.ssh/id_vagrant" IdentitiesOnly="yes" \
+  StrictHostKeyChecking=no UserKnownHostsFile=/dev/null >/dev/null
 
-  chown -R vagrant:vagrant /home/vagrant/.ssh
-else
-  echo 'Please run as root'
+sed -i ':a;N;$!ba;s/\nHost/\n\nHost/g' "$config_file"
+
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+
+declare -A files=(
+  [authorized_keys]="$pub_file"
+  [config]="$config_file"
+  [id_vagrant]="$priv_file"
+  [id_vagrant.pub]="$pub_file"
+)
+
+for name in "${!files[@]}"; do
+    install -m 600 "${files[$name]}" ~/.ssh/$name
+done
+
+if id "$username" >/dev/null 2>&1; then
+    rm -rf "/home/vagrant/.ssh"
+    cp -a ~/.ssh "/home/vagrant/.ssh"
+    chown -R vagrant:vagrant "/home/vagrant/.ssh"
+fi
+
+if [[ "$1" == "--windows" ]]; then
+    sed -i 's/UserKnownHostsFile \/dev\/null/UserKnownHostsFile NUL/g' "$config_file"
 fi

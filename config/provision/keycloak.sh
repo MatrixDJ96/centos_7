@@ -58,4 +58,4 @@ chown -R keycloak:keycloak /opt/keycloak
 chmod +x /opt/keycloak/latest/bin/*.sh
 
 systemctl daemon-reload
-systemctl enable --now keycloak
+systemctl enable keycloak

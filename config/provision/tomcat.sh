@@ -70,4 +70,4 @@ chown -R tomcat:tomcat /opt/tomcat
 chmod +x /opt/tomcat/latest/bin/*.sh
 
 systemctl daemon-reload
-systemctl enable --now tomcat
+systemctl enable tomcat

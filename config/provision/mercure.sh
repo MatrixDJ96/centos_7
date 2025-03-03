@@ -44,4 +44,4 @@ chown -R mercure:mercure /var/lib/mercure
 rm -f mercure_Linux_x86_64.tar.gz
 
 systemctl daemon-reload
-systemctl enable --now mercure
+systemctl enable mercure

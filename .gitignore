@@ -2,6 +2,9 @@
 *.log
 /.idea
 /.vagrant
+/*.tar
+/*.tar.gz
+/*.wsl
 /config/apache/*.conf
 /documents
 /projects

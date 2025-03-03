@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ "$(hostnamectl --static)" == "vagrant.local" ]]; then
+if [[ -n "$container" ]]; then
     sed -i -E 's/^\s*#?\s*enabled\s*=\s*\S+\s*$/enabled=0/' /etc/dnf/plugins/subscription-manager.conf
     subscription-manager config --rhsm.auto_enable_yum_plugins=0
 fi

@@ -19,8 +19,10 @@ if [ "$(whoami)" == "root" ]; then
 
     if [ "$file" != "" ]; then
       if [ "$host" != "" ] && [ "$host" != "localhost" ]; then
-        sed -i "/[[:space:]]\+$host\b/d" "$linux_host"
-        echo "127.0.0.1 $host" >>"$linux_host"
+        if [[ -z "$container" ]]; then
+          sed -i "/[[:space:]]\+$host\b/d" "$linux_host"
+          echo "127.0.0.1 $host" >>"$linux_host"
+        fi
 
         sed -i "/[[:space:]]\+$host\b/d" "$windows_host"
         echo "127.0.0.1 $host" >>"$windows_host"
