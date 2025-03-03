@@ -2,14 +2,23 @@
 
 cd /d "%~dp0"
 
-title Installing vagrant machine...
-echo Installing vagrant machine...
-vagrant up --provision --provider=%1
+set SKIP_PAUSE=1
 
-install_virtualhosts.bat
-install_ssh_key.bat
+title Cleaning system...
+echo Cleaning system...
+wsl --unregister CentOS
+wsl --unregister Ubuntu
 
-vagrant reload
+title Installing Ubuntu...
+echo Installing Ubuntu...
+wsl --install Ubuntu -n
+wsl -d Ubuntu -u root ./init.sh --ubuntu
+
+call import.bat CentOS.tar --clean
+
+title Installing CentOS...
+echo Installing CentOS...
+wsl -d CentOS -u root ./init.sh --centos
 
 title Done
 echo Done
