@@ -2,14 +2,16 @@
 
 cd /d "%~dp0"
 
-title Installing vagrant machine...
-echo Installing vagrant machine...
-vagrant up --provision --provider=%1
+set SKIP_PAUSE=1
+set SKIP_PREPARE=0
 
-install_virtualhosts.bat
-install_ssh_key.bat
+call pull.bat
 
-vagrant reload
+call export.bat --docker-wsl
+call import.bat --wsl-provision
+
+call install_virtualhosts.bat
+call install_ssh_key.bat
 
 title Done
 echo Done

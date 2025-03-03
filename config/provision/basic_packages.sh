@@ -42,7 +42,7 @@ yum -y install \
    gettext \
    glibc-all-langpacks
 
-if [[ "$(hostnamectl --static)" != "vagrant.local" ]]; then  
+if [[ -z "$container" ]]; then  
    yum -y install \
       htop \
       mlocate

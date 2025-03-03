@@ -29,4 +29,4 @@ PM2_HOME=/root/.pm2/18 mise x node@18 --command "pm2 startup && pm2 save -f"
 mv /etc/systemd/system/pm2-root.service /etc/systemd/system/pm2-18-root.service
 
 systemctl daemon-reload
-systemctl enable --now pm2-20-root pm2-18-root
+systemctl enable pm2-20-root pm2-18-root

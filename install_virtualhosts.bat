@@ -2,7 +2,7 @@
 
 :: https://superuser.com/questions/788924/is-it-possible-to-automatically-run-a-batch-file-as-administrator
 :-------------------------------------
-REM  --> Check for permissions
+REM --> Check for permissions
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 
 REM --> If error flag set, we do not have admin.
@@ -32,13 +32,17 @@ echo Installing virtual hosts...
 
 type C:\Windows\System32\drivers\etc\hosts>config\tmp_host
 
-vagrant ssh -c "sudo bash /vagrant/config/extra/install_virtualhosts.sh"
+wsl -d RHEL9 sudo bash /vagrant/config/extra/install_virtualhosts.sh
 
 type config\tmp_host>C:\Windows\System32\drivers\etc\hosts
 del config\tmp_host>NUL 2>&1
+
+if defined SKIP_PAUSE goto :end
 
 title Done
 echo Done
 
 pause
 exit /b %errorlevel%
+
+:end

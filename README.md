@@ -1,46 +1,175 @@
-### Requisiti
+# RHEL9 Dev Environment — Docker / WSL2
 
-- [Vagrant][1]
-- [VirtualBox][2]
+Ambiente di sviluppo basato su **RHEL9** pensato per lavorare localmente con stack web completi in modo riproducibile.
 
-### Configurazione
+Stack incluso:
+- Apache (VirtualHost da file di configurazione)
+- MySQL
+- PHP + Composer
+- Node.js
+- Java + Tomcat
+- Keycloak
+- Mercure
+- Tool di supporto installati via provisioning
 
-Seguire le info presenti nel file **settings.yaml.example** per le configurare _Vagrant_
+Il progetto nasce inizialmente per **Vagrant/VirtualBox**, ma oggi il flusso principale è:
 
-### Installazione
+- **Linux / macOS:** Docker
+- **Windows:** WSL2 (distro RHEL9 importata)
 
-- Creare il file **settings.yaml** nella root del progetto
-- Impostare la chiave _**synced_folder.map**_ nel file appena creato con il path desiderato
-- Eseguire `init.(bat/sh) virtualbox` per installare/aggiornare la macchina virtuale con _VirtualBox_
+---
 
-### Post-Installazione
+## Requisiti
 
-Per mappare i _Virtual Host_ di _Apache_ eseguire `install_virtualhosts.(bat/sh)` come admin\
-Questo script aggiorna il file hosts di sistema mappando in _localhost_ i _Virtual Host_ di _Apache_
+### Linux / macOS
+- Docker Engine o Docker Desktop
+- Permessi per eseguire Docker
 
-Per poter connettersi tramite `ssh vagrant.local` senza password eseguire `install_ssh_key.(bat/sh)`\
-Questo script genera una nuova coppia di chiavi ssh e configura ssh per permette la connessione remota
+### Windows
+- Windows 10/11 con **WSL2**
+- Possibilità di installare la distro **Ubuntu** (usata come ambiente di bootstrap)
+- Privilegi admin per aggiornare il file `hosts`
 
-Per ottimizzare le risorse attribuite alla macchima virtuale installare questo plugin tramite il comando
-- vagrant plugin install vagrant-vagrant-faster
-avi ssh e configura ssh per permette la connessione remota
+---
 
-Per usare la condivisione **NFS** delle cartelle su _Windows_ installare questo plugin tramite il comando
-- vagrant plugin install vagrant-winnfsd
+## Quick start
 
-### Apache
+### Linux / macOS (Docker)
 
-Per usare _Apache_ è necessario creare i _Virtual Host_ all'interno della cartella **config/apache**\
-I _Virtual Host_ creati dovranno avere la **DocumentRoot** nella sotto cartella **/vagrant/projects**
+```bash
+./init.sh
+```
 
-### Password
+Lo script:
+- scarica l’immagine `matrixdj96/rhel9:latest`
+- avvia il container `rhel9`
+- configura i VirtualHost nel file `hosts`
+- imposta accesso SSH tramite chiave
 
-Tutte le password di sistema sono `vagrant`
+---
 
-[1]: https://www.vagrantup.com/downloads.html
-[2]: https://www.virtualbox.org/wiki/Downloads
+### Windows (WSL2)
 
-### Risoluzioni problemi
+```bat
+init.bat
+```
 
-- Problema configurazione scheda di rete VirtualBox\
-  Rimuovere tutte le schede di tipo Host-Only tramite VirtualBox
+Lo script:
+- prepara Ubuntu WSL (Docker / Podman)
+- scarica ed esporta l’immagine RHEL9
+- importa la distro `RHEL9` in WSL
+- configura VirtualHost e SSH lato Windows
+
+Accesso alla distro:
+```bat
+wsl -d RHEL9
+```
+
+---
+
+## Progetti e volumi
+
+### Codice sorgente
+All’interno dell’ambiente:
+```
+/vagrant/projects
+```
+
+### Persistenza (Docker)
+Sul sistema host:
+```
+~/.rhel9/
+├── home        → /root
+├── mysql       → /var/lib/mysql
+└── projects    → /vagrant/projects
+```
+
+---
+
+## Apache VirtualHost
+
+- Configurazioni in:
+  ```
+  config/apache/*.conf
+  ```
+- Gli script leggono i `ServerName` e li mappano automaticamente nel file `hosts`
+- I VirtualHost puntano a:
+  ```
+  /vagrant/projects
+  ```
+
+---
+
+## Porte esposte (Docker)
+
+- 80   → HTTP
+- 443  → HTTPS
+- 2222 → SSH
+- 3306 → MySQL
+
+---
+
+## SSH
+
+Gli script `install_ssh_key.sh / .bat`:
+- generano `~/.ssh/id_vagrant` (se assente)
+- configurano `~/.ssh/config`
+- installano la chiave nell’ambiente
+
+Accesso:
+```bash
+ssh vagrant.local
+```
+
+Nota:
+- In Docker l’accesso avviene come **root** (via chiave).
+- In WSL viene creato l’utente **vagrant** e impostato come default.
+
+---
+
+## VirtualHost mapping (hosts)
+
+### Linux / macOS
+```bash
+./install_virtualhosts.sh
+```
+(Richiede privilegi per modificare `/etc/hosts`)
+
+### Windows
+```bat
+install_virtualhosts.bat
+```
+(Viene richiesto l’accesso come amministratore)
+
+---
+
+## Build e push immagine (opzionale)
+
+Build locale:
+```bash
+./build.sh
+```
+
+Push (usa podman):
+```bash
+./push.sh
+```
+
+---
+
+## Legacy: Vagrant / VirtualBox
+
+Nel repository sono ancora presenti:
+- `Vagrantfile`
+- `settings.yaml.example`
+
+Questa modalità è **deprecata** e non più mantenuta attivamente.  
+Il flusso consigliato è **Docker / WSL2**.
+
+---
+
+## Note
+
+- L’ambiente è pensato per uso **locale**.
+- Tutta la configurazione applicativa avviene tramite script.
+- Nessuna dipendenza da VirtualBox nel flusso attuale.
