@@ -2,14 +2,23 @@
 
 cd /d "%~dp0"
 
-title Installing vagrant machine...
-echo Installing vagrant machine...
-vagrant up --provision --provider=%1
+set SKIP_PAUSE=1
 
-install_virtualhosts.bat
-install_ssh_key.bat
+title Cleaning system...
+echo Cleaning system...
+wsl --unregister RHEL9
+wsl --unregister Ubuntu
 
-vagrant reload
+title Installing Ubuntu...
+echo Installing Ubuntu...
+wsl --install Ubuntu -n
+wsl -d Ubuntu -u root ./init.sh --ubuntu
+
+call import.bat RHEL9.tar --clean
+
+title Installing RHEL9...
+echo Installing RHEL9...
+wsl -d RHEL9 -u root ./init.sh --centos
 
 title Done
 echo Done
