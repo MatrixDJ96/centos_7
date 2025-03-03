@@ -11,17 +11,23 @@ if not exist "%USERPROFILE%\.ssh\id_vagrant" (
 )
 
 type "%USERPROFILE%\.ssh\config">config\tmp_ssh_config
+type "%USERPROFILE%\.ssh\id_vagrant">config\tmp_ssh_priv
 type "%USERPROFILE%\.ssh\id_vagrant.pub">config\tmp_ssh_pub
 
-vagrant ssh -c "sudo bash /vagrant/config/extra/install_ssh_key.sh"
+wsl -d RHEL9 sudo bash /vagrant/config/extra/install_ssh_key.sh --windows
 
 type config\tmp_ssh_config>"%USERPROFILE%\.ssh\config"
 
 del /f config\tmp_ssh_config>NUL 2>&1
+del /f config\tmp_ssh_priv>NUL 2>&1
 del /f config\tmp_ssh_pub>NUL 2>&1
+
+if defined SKIP_PAUSE goto :end
 
 title Done
 echo Done
 
 pause
 exit /b %errorlevel%
+
+:end
