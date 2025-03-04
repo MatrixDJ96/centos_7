@@ -4,7 +4,7 @@ yum -y install \
     selinux-policy \
     selinux-policy-targeted \
     policycoreutils \
-    policycoreutils-python \
+    policycoreutils-python-utils \
     libselinux-utils
 
 setenforce 0
