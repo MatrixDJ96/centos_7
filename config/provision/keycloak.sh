@@ -5,7 +5,7 @@ keycloak_minor_version="1"
 keycloak_patch_version="5"
 keycloak_full_version="${keycloak_major_version}.${keycloak_minor_version}.${keycloak_patch_version}"
 
-JAVA_HOME="/home/linuxbrew/.linuxbrew/opt/openjdk@21/libexec"
+JAVA_HOME=/usr/lib/jvm/jre-21
 
 userdel -f keycloak
 useradd -M -U -d /opt/keycloak -s /usr/bin/nologin keycloak

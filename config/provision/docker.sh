@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
 
 yum -y install \
     docker-ce \

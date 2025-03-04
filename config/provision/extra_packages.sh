@@ -1,19 +1,17 @@
 #!/bin/bash
 
-yum -y install https://mirrors.coreix.net/li.nux.ro/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm # msttcore-fonts
-
-yum-config-manager --enable nux-dextop
+yum -y install \
+    cabextract \
+    fontconfig \
+    mkfontscale \
+    mkfontdir \
+    xset
 
 yum -y install \
-    msttcore-fonts-installer \
-    urw-base35-nimbus-sans-fonts
+    https://repo.almalinux.org/almalinux/9/devel/x86_64/os/Packages/xorg-x11-font-utils-7.5-53.el9.x86_64.rpm \
+    https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/Packages/xorg-x11-fonts-75dpi-7.5-33.el9.noarch.rpm \
+    https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/Packages/xorg-x11-fonts-Type1-7.5-33.el9.noarch.rpm
 
 yum -y install \
-    bzip2-devel \
-    libcurl-devel \
-    libxslt-devel \
-    libzip-devel \
-    oniguruma-devel \
-    readline-devel
-
-yum -y install https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox-0.12.6-1.centos7.x86_64.rpm
+    https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm \
+    https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox-0.12.6.1-2.almalinux9.x86_64.rpm

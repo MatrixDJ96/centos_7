@@ -26,12 +26,6 @@ bash --login /vagrant/config/provision/php.sh 2>&1 | tee -i /vagrant/config/prov
 echo "Installing/Configuring Composer..."
 bash --login /vagrant/config/provision/composer.sh 2>&1 | tee -i /vagrant/config/provision/composer.log >/dev/null
 
-echo "Installing/Configuring Brew..."
-bash --login /vagrant/config/provision/brew.sh 2>&1 | tee -i /vagrant/config/provision/brew.log >/dev/null
-
-echo "Installing/Configuring Setsid..."
-bash --login /vagrant/config/provision/setsid.sh 2>&1 | tee -i /vagrant/config/provision/setsid.log >/dev/null
-
 echo "Installing/Configuring Mise..."
 bash --login /vagrant/config/provision/mise.sh 2>&1 | tee -i /vagrant/config/provision/mise.log >/dev/null
 

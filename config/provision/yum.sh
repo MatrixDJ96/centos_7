@@ -1,22 +1,12 @@
 #!/bin/bash
 
-for file in /etc/yum.repos.d/*.rpmnew; do
-    if [ -f "$file" ]; then
-        basefile=$(basename "$file" .rpmnew)
-        mv "$file" "/etc/yum.repos.d/$basefile"
-    fi
-done
+if [[ "$(hostnamectl --static)" == "vagrant.local" ]]; then
+    sed -i -E 's/^\s*#?\s*enabled\s*=\s*\S+\s*$/enabled=0/' /etc/dnf/plugins/subscription-manager.conf
+    subscription-manager config --rhsm.auto_enable_yum_plugins=0
+fi
 
-for file in /etc/yum.repos.d/CentOS-*.repo; do
-    if [ -f "$file" ] && grep -qP '^\s*[^#\s]' "$file"; then
-        sed -E -i 's|https?://mirror[^/]*\.centos\.org/|http://vault.centos.org/|g' "$file"
-        sed -E -i 's/^\s*#?\s*(mirrorlist=)/#\1/g' "$file"
-        sed -E -i 's/^\s*#?\s*(baseurl=)/\1/' "$file"
-    fi
-done
+yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 
-yum -y install epel-release
-yum -y install https://repo.ius.io/ius-release-el7.rpm 
+yum config-manager --enable epel
 
-yum-config-manager --enable epel
-yum-config-manager --enable ius
+# /usr/bin/crb enable

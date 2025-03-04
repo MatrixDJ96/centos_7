@@ -5,7 +5,7 @@ tomcat_minor_version="0"
 tomcat_patch_version="107"
 tomcat_full_version="${tomcat_major_version}.${tomcat_minor_version}.${tomcat_patch_version}"
 
-JAVA_HOME="/home/linuxbrew/.linuxbrew/opt/openjdk@11/libexec"
+JAVA_HOME=/usr/lib/jvm/jre-11
 
 userdel -f tomcat
 useradd -M -U -d /opt/tomcat -s /usr/bin/nologin tomcat

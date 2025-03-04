@@ -31,33 +31,21 @@ get_php_pkgs() {
     result+=" ${1}-${php_pkg}"
   done
 
+  result+=" -x php-fedora-autoloader"
+
   echo "${result}"
 }
 
-yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum -y install https://rpms.remirepo.net/enterprise/remi-release-9.rpm
 
-yum-config-manager --disable remi-php54
-yum-config-manager --disable remi-php70
-yum-config-manager --disable remi-php71
-yum-config-manager --disable remi-php72
-yum-config-manager --disable remi-php73
-yum-config-manager --disable remi-php74
-yum-config-manager --disable remi-php80
-yum-config-manager --disable remi-php81
-yum-config-manager --disable remi-php82
-yum-config-manager --disable remi-php83
+yum -y module reset php
 
 yum -y install $(get_php_pkgs php74-php)
 yum -y install $(get_php_pkgs php80-php)
 yum -y install $(get_php_pkgs php81-php)
 yum -y install $(get_php_pkgs php82-php)
 yum -y install $(get_php_pkgs php83-php)
-
-sed -i 's/:9000/:9074/' /etc/opt/remi/php74/php-fpm.d/www.conf
-sed -i 's/:9000/:9080/' /etc/opt/remi/php80/php-fpm.d/www.conf
-sed -i 's/:9000/:9081/' /etc/opt/remi/php81/php-fpm.d/www.conf
-sed -i 's/:9000/:9082/' /etc/opt/remi/php82/php-fpm.d/www.conf
-sed -i 's/:9000/:9083/' /etc/opt/remi/php83/php-fpm.d/www.conf
+yum -y install $(get_php_pkgs php84-php)
 
 cp -f /vagrant/config/php/99-php-fpm.conf /etc/httpd/conf.modules.d/99-php-fpm.conf
 chmod 644 /etc/httpd/conf.modules.d/99-php-fpm.conf
@@ -86,9 +74,11 @@ post_install php80
 post_install php81
 post_install php82
 post_install php83
+post_install php84
 
 systemctl enable php74-php-fpm
 systemctl enable php80-php-fpm
 systemctl enable php81-php-fpm
 systemctl enable php82-php-fpm
 systemctl enable php83-php-fpm
+systemctl enable php84-php-fpm

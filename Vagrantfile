@@ -49,7 +49,7 @@ end
 
 Vagrant.configure("2") do |config|
     # Use Centos 7 as base machine
-    config.vm.box = "generic/centos7"
+    config.vm.box = "generic/rhel9"
 
     # Hostname
     config.vm.hostname = "vagrant.local"

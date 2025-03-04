@@ -1,12 +1,7 @@
 #!/bin/bash
 
-brew install --force --overwrite mise
-brew link --force --overwrite mise
+yum config-manager --add-repo https://mise.jdx.dev/rpm/mise.repo
 
-echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/mise activate bash)"' > /etc/profile.d/mise.sh
-source /etc/profile.d/mise.sh
+yum -y install mise
 
-echo '#!/bin/bash' > /bin/mise
-echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/mise activate bash)"' >> /bin/mise
-echo 'exec /home/linuxbrew/.linuxbrew/bin/mise "$@"' >> /bin/mise
-chmod +x /bin/mise
+echo 'eval "$(mise activate bash)"' > /etc/profile.d/mise.sh
