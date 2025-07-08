@@ -2,7 +2,7 @@
 
 tomcat_major_version="9"
 tomcat_minor_version="0"
-tomcat_patch_version="98"
+tomcat_patch_version="107"
 tomcat_full_version="${tomcat_major_version}.${tomcat_minor_version}.${tomcat_patch_version}"
 
 JAVA_HOME="/home/linuxbrew/.linuxbrew/opt/openjdk@11/libexec"

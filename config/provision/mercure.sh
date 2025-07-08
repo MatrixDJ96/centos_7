@@ -1,8 +1,8 @@
 #!/bin/bash
 
 mercure_major_version="0"
-mercure_minor_version="16"
-mercure_patch_version="3"
+mercure_minor_version="18"
+mercure_patch_version="4"
 mercure_full_version="${mercure_major_version}.${mercure_minor_version}.${mercure_patch_version}"
 
 userdel -f mercure

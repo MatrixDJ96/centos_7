@@ -2,7 +2,7 @@
 
 keycloak_major_version="26"
 keycloak_minor_version="1"
-keycloak_patch_version="2"
+keycloak_patch_version="5"
 keycloak_full_version="${keycloak_major_version}.${keycloak_minor_version}.${keycloak_patch_version}"
 
 JAVA_HOME="/home/linuxbrew/.linuxbrew/opt/openjdk@21/libexec"
@@ -30,6 +30,8 @@ fi
 
 tar -xf keycloak-${keycloak_full_version}.tar.gz
 mv keycloak-${keycloak_full_version} /opt/keycloak/latest
+
+cp -f -u /opt/keycloak/backup/providers/* /opt/keycloak/latest/providers
 
 cp -f /vagrant/config/keycloak/keycloak.service /usr/lib/systemd/system/keycloak.service
 cp -f /vagrant/config/keycloak/keycloak.sysusers /usr/lib/sysusers.d/keycloak.conf

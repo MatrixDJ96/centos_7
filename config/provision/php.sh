@@ -21,6 +21,7 @@ php_pkgs=(
   "xdebug"
   "xml"
   "zip"
+  "bcmath"
 )
 
 get_php_pkgs() {
