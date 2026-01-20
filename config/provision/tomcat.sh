@@ -5,7 +5,7 @@ tomcat_minor_version="0"
 tomcat_patch_version="107"
 tomcat_full_version="${tomcat_major_version}.${tomcat_minor_version}.${tomcat_patch_version}"
 
-JAVA_HOME=/usr/lib/jvm/jre-11
+JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/jre-11}"
 
 userdel -f tomcat
 useradd -M -U -d /opt/tomcat -s /usr/bin/nologin tomcat
@@ -18,6 +18,7 @@ wget https://archive.apache.org/dist/tomcat/tomcat-${tomcat_major_version}/v${to
 
 mkdir -p /usr/lib/systemd/system
 mkdir -p /opt/tomcat/latest
+mkdir -p /etc/sysconfig
 
 rm -rf /opt/tomcat/backup
 
@@ -29,13 +30,16 @@ tar -xf apache-tomcat-${tomcat_full_version}.tar.gz
 mv apache-tomcat-${tomcat_full_version} /opt/tomcat/latest
 
 cp -f /vagrant/config/tomcat/tomcat.service /usr/lib/systemd/system/tomcat.service
+cp -f /vagrant/config/tomcat/setenv.sh /opt/tomcat/latest/bin/setenv.sh
 cp -f /vagrant/config/tomcat/tomcat-users.xml /opt/tomcat/latest/conf/tomcat-users.xml
 cp -f /vagrant/config/tomcat/context.xml /opt/tomcat/latest/webapps/manager/META-INF/context.xml
 cp -f /vagrant/config/tomcat/context.xml /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
+cp -f /vagrant/config/tomcat/environment /etc/sysconfig/tomcat
 
-sed -i -E "s|(JAVA_HOME=).*|\"\1${JAVA_HOME}\"|" /usr/lib/systemd/system/tomcat.service
+sed -i -E "s|(JAVA_HOME=).*|\1${JAVA_HOME}|" /etc/sysconfig/tomcat
 
 chmod 644 /usr/lib/systemd/system/tomcat.service
+chmod 755 /opt/tomcat/latest/bin/setenv.sh
 chmod 600 /opt/tomcat/latest/conf/tomcat-users.xml
 chmod 640 /opt/tomcat/latest/webapps/manager/META-INF/context.xml
 chmod 640 /opt/tomcat/latest/webapps/host-manager/META-INF/context.xml
@@ -64,5 +68,4 @@ chown -R tomcat:tomcat /opt/tomcat
 chmod +x /opt/tomcat/latest/bin/*.sh
 
 systemctl daemon-reload
-
 systemctl enable --now tomcat
