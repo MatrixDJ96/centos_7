@@ -1,15 +1,20 @@
 #!/bin/bash
 
-yum -y install https://dev.mysql.com/get/mysql84-community-release-el9-1.noarch.rpm
+yum -y install https://dev.mysql.com/get/mysql84-community-release-el9-2.noarch.rpm
 
 yum config-manager --disable mysql80-community
 yum config-manager --enable mysql-8.4-lts-community
 
 yum -y install mysql-community-server
 
-systemctl enable --now mysqld
+mkdir -p /etc/sysconfig
 
-PASSWORD=$(grep 'temporary password' /var/log/mysqld.log | sed 's/.* //g')
-mysql --password="${PASSWORD}" --connect-expired-password --execute "ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY '^Inv@l1d-P@a33w0rd_';SET GLOBAL validate_password.policy=LOW;SET GLOBAL validate_password.length=0;ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'vagrant';UPDATE mysql.user SET Host='%' WHERE User='root';"
+install -m 0755 -o root -g root \
+  /vagrant/config/mysql/entrypoint.sh \
+  /usr/bin/mysqld_pre_systemd
 
-systemctl restart mysqld
+install -m 0644 -o root -g root \
+  /vagrant/config/mysql/environment \
+  /etc/sysconfig/mysql
+
+systemctl enable mysqld

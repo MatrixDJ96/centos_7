@@ -4,13 +4,10 @@ After=network.target
 
 [Service]
 Type=forking
-Environment=CATALINA_HOME=/opt/tomcat/latest
-Environment=CATALINA_BASE=/opt/tomcat/latest
-Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
-Environment=JAVA_HOME=
-Environment="JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom"
 ExecStart=/opt/tomcat/latest/bin/startup.sh
 ExecStop=/opt/tomcat/latest/bin/shutdown.sh
+EnvironmentFile=-/etc/sysconfig/tomcat
+Restart=on-failure
 User=tomcat
 Group=tomcat
 
