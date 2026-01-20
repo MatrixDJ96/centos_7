@@ -2,46 +2,31 @@
 
 cd "${HOME}" || exit
 
-if [ "$(id -u)" -eq 0 ]; then
-	rm -rf ~/.local/share/mise/shims
+rm -rf ~/.local/share/mise/shims
 
-    mise install node@20
-    mise install node@18
-    mise install node@16
-    mise install node@14
+mkdir -p ~/.local/share/mise/shims
+mkdir -p ~/.local/share/mise/installs/node
+mkdir -p ~/.local/share/mise/downloads/node
 
-    mise x node@20 -- npm install yarn -g
-    mise x node@18 -- npm install yarn -g
-    mise x node@16 -- npm install yarn -g
-    mise x node@14 -- npm install yarn -g
+mise install node@20
+mise install node@18
 
-    mise x node@20 -- npm install pm2 -g
+mise x node@20 -- npm install yarn -g
+mise x node@18 -- npm install yarn -g
 
-	mise reshim
-fi
+mise x node@20 -- npm install pm2 -g
+mise x node@18 -- npm install pm2 -g
 
-if [[ "$(hostnamectl --static)" == "vagrant.local" ]]; then
-    if [ "$(id -u)" -eq 0 ]; then
-        sudo -u vagrant bash --login "${0}"
-    else
-		rm -rf ~/.local/share/mise/shims
+mise x node@20 -- yarn config set strict-ssl false -g
+mise x node@18 -- yarn config set strict-ssl false -g
 
-        mkdir -p ~/.local/share/mise/shims
-        mkdir -p ~/.local/share/mise/installs/node
-        mkdir -p ~/.local/share/mise/downloads/node
+mise reshim
 
-        node_vagrant=~/.local/share/mise/installs/node
-        node_root=/root/.local/share/mise/installs/node
+PM2_HOME=/root/.pm2/20 mise x node@20 --command "pm2 startup && pm2 save -f"
+mv /etc/systemd/system/pm2-root.service /etc/systemd/system/pm2-20-root.service
 
-        for version in $(sudo ls "${node_root}"); do
-            if [ -d "${node_root}/${version}" ]; then
-                rm -rf "${node_vagrant}/${version}"
-            fi
+PM2_HOME=/root/.pm2/18 mise x node@18 --command "pm2 startup && pm2 save -f"
+mv /etc/systemd/system/pm2-root.service /etc/systemd/system/pm2-18-root.service
 
-            sudo cp -R "${node_root}/${version}" "${node_vagrant}/${version}"
-            sudo chown -R vagrant:vagrant "${node_vagrant}/${version}"
-        done
-
-        mise reshim
-    fi
-fi
+systemctl daemon-reload
+systemctl enable --now pm2-20-root pm2-18-root

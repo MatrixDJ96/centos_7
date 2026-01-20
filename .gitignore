@@ -4,6 +4,7 @@
 /.vagrant
 /config/apache/*.conf
 /documents
+/projects
 /settings.yaml
 /settings.windows.yaml
 /settings.darwin.yaml

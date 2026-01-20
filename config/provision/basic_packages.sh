@@ -26,15 +26,21 @@ yum -y install \
    valgrind-devel
 
 yum -y install \
-    hostname \
-    lsof \
-    nano \
-    openssl \
-    pip \
-    unzip \
-    wget \
-    which \
-    zip
+   hostname \
+   iputils \
+   lsof \
+   nano \
+   openssl \
+   pip \
+   sudo \
+   unzip \
+   wget \
+   which \
+   zip
+
+yum -y install \
+   gettext \
+   glibc-all-langpacks
 
 if [[ "$(hostnamectl --static)" != "vagrant.local" ]]; then  
    yum -y install \

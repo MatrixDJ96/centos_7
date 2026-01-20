@@ -3,8 +3,9 @@ Description=Keycloak server
 After=network.target
 
 [Service]
-Environment=JAVA_HOME=
 ExecStart=/opt/keycloak/latest/bin/kc.sh start-dev
+EnvironmentFile=-/etc/sysconfig/keycloak
+Restart=on-failure
 User=keycloak
 Group=keycloak
 
